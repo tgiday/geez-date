@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	gn "github.com/tgiday/mgn2"
+	"github.com/tgiday/mgn2"
 )
 
 type Gdate struct {
@@ -42,9 +42,9 @@ func Today() Gdate {
 
 func (g Gdate) String() string {
 	month := []string{"መስከረም", "ጥቅምት", "ኅዳር", "ታኅሣሥ", "ጥር", "የካቲት", "መጋቢት", "ሚያዝያ", "ግንቦት", "ሰኔ", "ሐምሌ", "ነሐሴ", "ጳጉሜ"}
-	d := gn.Fmtint(g.d)
+	d := mgn2.Fmtint(g.d)
 	m := month[g.m-1]
-	y := gn.Fmtint(g.y)
+	y := mgn2.Fmtint(g.y)
 	str := fmt.Sprintf("%s %s %s", d, m, y)
 	return str
 }
