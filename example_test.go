@@ -16,3 +16,9 @@ func ExampleConvert() {
 	//output: xmass 28-4-2016
 
 }
+
+func ExampleToday() {
+	i := Today()
+	fmt.Println(i)
+	//output: today date
+}
