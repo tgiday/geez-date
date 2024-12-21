@@ -22,3 +22,8 @@ func ExampleToday() {
 	fmt.Println(i)
 	//output: today date
 }
+func ExampleGeezday() {
+	i := Geezday("2024-01-09")
+	fmt.Println(i)
+	//output: ፴ ታኅሣሥ ፳፻፲፮
+}
