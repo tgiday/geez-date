@@ -17,11 +17,6 @@ func ExampleConvert() {
 
 }
 
-func ExampleToday() {
-	i := Today()
-	fmt.Println(i)
-	//output: today date
-}
 func ExampleGeezday() {
 	i := Geezday("2024-01-09")
 	fmt.Println(i)

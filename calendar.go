@@ -49,42 +49,6 @@ func (g Gdate) String() string {
 	return str
 }
 
-// Convert return a Geez calander date ,take string Gregorian calendar date  ("1991-05-24" to 16-9-1983)
-func Convert(date string) string {
-	d, _ := time.Parse("2006-01-02", date)
-	var z time.Time
-	spt := z.AddDate(d.Year()-1, 10, 8) //spt 11 1st day or pagume of geez calander
-	f29 := spt.AddDate(0, 0, 112)       // return feb 29(leap) or march 1(not leap)
-	//dates jan 1 and after
-	x := d.AddDate(0, 0, 111)
-	if f29.Month() != 2 {
-		mm, dd, yy := convert(x)
-		str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
-		return str
-	}
-	//dates b/n ጳጐሜ 6 and jan 1
-	if x.YearDay() != 365 && d.Year() != x.Year() {
-		mm, dd, yy := convert(x)
-		str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
-		return str
-	}
-	//dates befor ጳጐሜ 6
-	if x.YearDay() != 365 {
-		x = d.AddDate(0, 0, 112)
-		mm, dd, yy := convert(x)
-		str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
-		return str
-	}
-	// Leap day.  ጳጐሜ 6
-	x = d.AddDate(0, 0, 110)
-	_, _, yy := convert(x)
-	mm := 13
-	dd := 6
-	str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
-	return str
-
-}
-
 // daysBefore[m] counts the number of days in a non-leap year
 // before month m begins. There is an entry for m=13, counting
 // the number of days before Meskerem of next year (365).
@@ -121,9 +85,26 @@ func convert(x time.Time) (int, int, int) {
 	day = day - begin + 1
 	if month > 13 {
 		month = month - 13
-		yr = yr - 7 //geez year
 		return month, day, yr
 	}
-	yr = yr - 8 //geez year
 	return month, day, yr
+}
+
+// Convert return a Geez calander date ,take string Gregorian calendar date  ("1991-05-24" to 16-9-1983)
+func Convert(date string) string {
+	d, _ := time.Parse("2006-01-02", date)
+	x := d.AddDate(0, 0, -2810)
+	if isLeap(x.Year()) {
+		c := x.AddDate(0, 0, -1)
+		mm, dd, yy := convert(c)
+		str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
+		return str
+	}
+	mm, dd, yy := convert(x)
+	str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
+	return str
+}
+
+func isLeap(year int) bool {
+	return year%4 == 0 && (year%100 != 0 || year%400 == 0)
 }
