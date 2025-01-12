@@ -69,27 +69,6 @@ var daysBefore = [...]int32{
 	30 + 30 + 30 + 30 + 30 + 30 + 30 + 30 + 30 + 30 + 30 + 30 + 5,
 }
 
-func convert(x time.Time) (int, int, int) {
-	yr := x.Year()
-	day := x.YearDay() - 1
-	month := int(day / 30)
-	end := int(daysBefore[month+1])
-	var begin int
-	if day >= end {
-		month++
-		begin = end
-	} else {
-		begin = int(daysBefore[month])
-	}
-	month++
-	day = day - begin + 1
-	if month > 13 {
-		month = month - 13
-		return month, day, yr
-	}
-	return month, day, yr
-}
-
 // Convert return a Geez calander date ,take string Gregorian calendar date  ("1991-05-24" to 16-9-1983)
 func Convert(date string) string {
 	d, _ := time.Parse("2006-01-02", date)
@@ -116,4 +95,25 @@ func Convert(date string) string {
 
 func isLeap(year int) bool {
 	return year%4 == 0 && (year%100 != 0 || year%400 == 0)
+}
+
+func convert(x time.Time) (int, int, int) {
+	yr := x.Year()
+	day := x.YearDay() - 1
+	month := int(day / 30)
+	end := int(daysBefore[month+1])
+	var begin int
+	if day >= end {
+		month++
+		begin = end
+	} else {
+		begin = int(daysBefore[month])
+	}
+	month++
+	day = day - begin + 1
+	if month > 13 {
+		month = month - 13
+		return month, day, yr
+	}
+	return month, day, yr
 }
