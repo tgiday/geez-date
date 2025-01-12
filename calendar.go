@@ -94,12 +94,21 @@ func convert(x time.Time) (int, int, int) {
 func Convert(date string) string {
 	d, _ := time.Parse("2006-01-02", date)
 	x := d.AddDate(0, 0, -2810)
+	//leap day
+	if isLeap(d.Year()+1) && d.Day() == 11 && d.Month() == 9 {
+		c := x.AddDate(0, 0, -1)
+		mm, _, yy := convert(c)
+		str := fmt.Sprintf("%v-%v-%v", 6, mm, yy)
+		return str
+	}
+	//after leap day
 	if isLeap(x.Year()) {
 		c := x.AddDate(0, 0, -1)
 		mm, dd, yy := convert(c)
 		str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
 		return str
 	}
+	//otherwise
 	mm, dd, yy := convert(x)
 	str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
 	return str
