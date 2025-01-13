@@ -10,6 +10,12 @@ import (
 	"github.com/tgiday/mgn2"
 )
 
+const (
+	delta     = -2810
+	leapday   = 11
+	leapmonth = 9
+)
+
 type Gdate struct {
 	d, m, y int
 }
@@ -72,23 +78,23 @@ var daysBefore = [...]int32{
 // Convert return a Geez calander date ,take string Gregorian calendar date  ("1991-05-24" to 16-9-1983)
 func Convert(date string) string {
 	d, _ := time.Parse("2006-01-02", date)
-	x := d.AddDate(0, 0, -2810)
-	//leap day
-	if isLeap(d.Year()+1) && d.Day() == 11 && d.Month() == 9 {
-		c := x.AddDate(0, 0, -1)
-		mm, _, yy := convert(c)
+	g := d.AddDate(0, 0, delta)
+	// leap day
+	if isLeap(d.Year()+1) && d.Day() == leapday && d.Month() == leapmonth {
+		g = g.AddDate(0, 0, -1)
+		_, mm, yy := convert(g)
 		str := fmt.Sprintf("%v-%v-%v", 6, mm, yy)
 		return str
 	}
-	//after leap day
-	if isLeap(x.Year()) {
-		c := x.AddDate(0, 0, -1)
-		mm, dd, yy := convert(c)
+	//  >leap day
+	if isLeap(g.Year()) {
+		g = g.AddDate(0, 0, -1)
+		dd, mm, yy := convert(g)
 		str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
 		return str
 	}
-	//otherwise
-	mm, dd, yy := convert(x)
+	// <leap day
+	dd, mm, yy := convert(g)
 	str := fmt.Sprintf("%v-%v-%v", dd, mm, yy)
 	return str
 }
@@ -113,7 +119,7 @@ func convert(x time.Time) (int, int, int) {
 	day = day - begin + 1
 	if month > 13 {
 		month = month - 13
-		return month, day, yr
+		return day, month, yr
 	}
-	return month, day, yr
+	return day, month, yr
 }
